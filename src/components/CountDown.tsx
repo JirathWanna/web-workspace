@@ -6,8 +6,6 @@ interface Props {
     onDelete : () => void;
 }
 
-
-
 export default function CountDown({title, duration, onDelete}:Props) {
 
     function handleTimeSend(time:number) {
@@ -20,7 +18,9 @@ export default function CountDown({title, duration, onDelete}:Props) {
                 <button onClick={onDelete} className="absolute cursor-pointer font-normal text-shadow-gray-800 text-shadow-md right-2 top-0 text-[16px] hover:text-gray-300">x</button>
                 {title} 
                 <br /> 
-                <span className="text-white font-semibold text-[14px] text-shadow-gray-800 text-shadow-md"> <Timer onSendTime={handleTimeSend} duration={duration}></Timer> </span> 
+                <span className="text-white font-semibold text-[14px] text-shadow-gray-800 text-shadow-md">
+                    <Timer onSendTime={handleTimeSend} duration={duration} title={title} />
+                </span> 
             </div>
         </>
     )

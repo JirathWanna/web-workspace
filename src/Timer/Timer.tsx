@@ -3,17 +3,35 @@ import { useEffect, useState } from "react";
 interface Props {
     duration : number;
     onSendTime : (time:number) => void;
+    title: string; // เพิ่ม title เพื่อใช้เป็น key
 }
 
-export default function Timer({duration,onSendTime}:Props) {
+export default function Timer({duration,onSendTime, title}:Props) {
     const [time, setTime] = useState(duration);
 
     useEffect(() => {
-        setTimeout(() => {
-            setTime(time - 1000);
-        },1000)
-        onSendTime(time);
-    },[time])
+        const storageKey = `timer-endTime-${title}`;
+        let endTime = localStorage.getItem(storageKey);
+        let now = Date.now();
+
+        if (!endTime) {
+            endTime = (now + duration).toString();
+            localStorage.setItem(storageKey, endTime);
+        }
+
+        const interval = setInterval(() => {
+            const left = parseInt(endTime!) - Date.now();
+            setTime(left > 0 ? left : 0);
+            onSendTime(left > 0 ? left : 0);
+            if (left <= 0) {
+                clearInterval(interval);
+                localStorage.removeItem(storageKey);
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    // เพิ่ม title, duration ใน dependency เผื่อเปลี่ยน countdown
+    }, [title, duration]);
 
     const getFormattedTime = (milliseconds:number) => {
         let total_seconds = Math.floor(milliseconds / 1000);

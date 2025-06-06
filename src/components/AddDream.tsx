@@ -26,7 +26,7 @@ export default function AddDream({visible, onClose, onSave}: Props) {
     }
 
     return (
-        <div className={`${visible ? "visible opacity-100":"hidden opacity-0"} w-[300px] md:w-[500px] overflow-y-auto bg-white fixed z-20 rounded-2xl p-10`}>
+        <div className={`${visible ? "visible opacity-100":"hidden opacity-0"} h-[70%] w-[300px] md:w-[500px] overflow-y-auto bg-white fixed z-20 rounded-2xl p-10`}>
             <div className="flex items-center justify-between">
                 <h1 className=" text-black font-black text-[32px] text-shadow-gray-400 text-shadow-md mb-8">Add Your Dream</h1> 
                 <button onClick={() => {handleReset(); onClose();}} className="hover:bg-gray-500 bg-black w-7 h-7 text-white rounded-full cursor-pointer duration-100">X</button> 

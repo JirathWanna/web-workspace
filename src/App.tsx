@@ -5,7 +5,6 @@ import settingpic from "./assets/settings-3-fill.png"
 import Setting from"./components/Setting"
 import { useEffect, useState } from "react"
 import Dream from "./components/Dream"
-import input_img from "./assets/ChatGPT Image 18 เม.ย. 2568 13_32_51.png"
 import AddDream from "./components/AddDream"
 import CountDown from "./components/CountDown"
 import AddCountDown from "./components/AddCountDown"
@@ -14,7 +13,9 @@ import DreamInfo from "./components/DreamInfo"
 import hamburger from "./assets/menu-line.svg"
 import help from "./assets/question-line.svg"
 import YoutubeHelp from "./components/YoutubeHelp"
-
+import beach from "./assets/pexels-photo-457882.jpeg"
+import FileUploader from "./components/FileUploader"
+import userPic from "./assets/gray-user-profile-icon-png-fP8Q1P.png"
 
 import youtube_logo from "./assets/youtube-line.svg"
 import fire_logo from "./assets/fire-line.svg"
@@ -35,11 +36,13 @@ function App() {
     name : string;
     des : string;
     profile : string;
+    yt_link : string;
+    image_image : string;
   }
 
   const [profileArr, setProfileArr] = useState<Profile>(() => {
     const item = localStorage.getItem('profileArr');
-    return item ? JSON.parse(item) : { name: "Jirath Wanna", des: "Hi! I'm software developer at Joseph Upatham School!", profile: `${profileOni}` };
+    return item ? JSON.parse(item) : { name: "Username", des: "This is description. You can write anything.", profile: `${userPic}`,yt_link: "https://www.youtube.com/embed/CriW4rjSUPE?si=Jhg7_gke8VgwRnAr", image_image:`${beach}`};
   })
 
   useEffect (() => {
@@ -52,7 +55,6 @@ function App() {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   const [youtubeLinkInput, setYoutubeLinkInput] = useState("");
-  const [youtubeLink, setYoutubeLink] = useState("https://www.youtube.com/embed/JGqzKmp_5Bg?rel=0");
 
   const [dreamShowing, setDreamShowing] = useState<Dream>();
 
@@ -64,7 +66,7 @@ function App() {
   }
   const [dreams, setDream] = useState<Dream[]>(() => {
     const item = localStorage.getItem('dreams');
-    return item ? JSON.parse(item) : [];
+    return item ? JSON.parse(item) : [{img:beach, des:"I wanna go to Pattaya.", title:"This is your goal!", emoji:"🛫"}];
   })
 
   useEffect (() => {
@@ -78,7 +80,7 @@ function App() {
 
   const [countDowns, setCountDowns] = useState<countDown[]>(() => {
     const item = localStorage.getItem('countdowns');
-    return item ? JSON.parse(item) : [];
+    return item ? JSON.parse(item) : [{title:"Exam 1", duration:10000000000}];
   });
 
   useEffect (() => {
@@ -88,9 +90,9 @@ function App() {
   
   function handleSave(newName:string, newDes:string, newProfile:string) {
     if (newProfile != "") {
-      setProfileArr({ name: newName, des: newDes, profile: newProfile })
+      setProfileArr({ name: newName, des: newDes, profile: newProfile, yt_link:`${profileArr.yt_link}`, image_image:`${profileArr.image_image}`})
     } else {
-      setProfileArr({ name: newName, des: newDes, profile: profileArr.profile })
+      setProfileArr({ name: newName, des: newDes, profile:`${profileArr.profile}`, yt_link:`${profileArr.yt_link}`, image_image:`${profileArr.image_image}`})
     }
     
   }
@@ -110,6 +112,11 @@ function App() {
   }
 
   function handleDeleteCD(inputIndex:number) {
+    const deleted = countDowns[inputIndex];
+    if (deleted) {
+      // ลบ localStorage ที่เกี่ยวข้อง
+      localStorage.removeItem(`timer-endTime-${deleted.title}`);
+    }
     let updatedCD = countDowns.filter((_,index) => (
       index != inputIndex
     ))
@@ -128,6 +135,12 @@ function App() {
   function handleDreamClicked(dream:Dream) {
     setDreamInfoVisible(true);
     setDreamShowing(dream);
+  }
+
+  const [imgImg, setImgImg] = useState("");
+
+  function handleimgimgurl(imgUrl:string) {
+    setImgImg(imgUrl);
   }
 
   return (
@@ -171,15 +184,15 @@ function App() {
             </div>
             
             {/* Grid เก็บ Dream */}
-            <div className="w-full mt-10 sm:grid-cols-3 grid-cols-2 grid gap-[1vw]">
+            <div className="w-full mt-10 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 grid-cols-2 grid gap-[1vw]">
               
               {dreams.map((i,index) => (
                 <Dream onClick={() => handleDreamClicked(i)} onDelete={() => handleDelete(index)} img={i.img} title={i.title} emoji={i.emoji} key={index}></Dream>
               ))}
 
               {/* ปุ่ม Add */}
-              <div className="flex justify-center items-center h-[20vh] rounded-2xl group cursor-pointer bg-gray-600/20 backdrop-blur-xs hover:bg-white/20 duration-200">
-                <button onClick={() => setAddDreamVisible(true)} className="group-hover:w-12 w-10 duration-200 cursor-pointer font-semibold"><img src={AddIcon} alt="" /></button>
+              <div onClick={() => setAddDreamVisible(true)} className="flex justify-center items-center h-[20vh] rounded-2xl group cursor-pointer bg-gray-600/20 backdrop-blur-xs hover:bg-white/20 duration-200">
+                <button className="group-hover:w-12 w-10 duration-200 cursor-pointer font-semibold"><img src={AddIcon} alt="" /></button>
               </div>
               
             </div>
@@ -192,7 +205,7 @@ function App() {
                 frameBorder="0"
                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                 loading="lazy"
-                className="rounded-lg mt-5 sm:mt-auto"
+                className="rounded-lg mt-5 lg:mt-auto"
                 title="Spotify player"
               ></iframe>
 
@@ -236,19 +249,30 @@ function App() {
 
               {selectedTabIndex == 0 && 
                 <div>
-                  <iframe  className="rounded-[5px] w-full" src={youtubeLink} title="Youtube" allowFullScreen></iframe>
+                  <iframe  className="rounded-[5px] w-full" src={profileArr.yt_link} title="Youtube" allowFullScreen></iframe>
                   <div className="mt-3 flex-col gap-3  flex">
                     <div className="flex">
                       <input value={youtubeLinkInput} onChange={(e) => setYoutubeLinkInput(e.target.value)} placeholder="Add Youtube Embed Link" type="text" className="bg-white rounded-[5px] p-1 w-full" />
                       <button onClick={() => setYoutubeVisible(true)} className="mx-1"><img src={help} className="w-7 cursor-pointer" alt="" /></button>
                     </div>
-                    <button onClick={() => setYoutubeLink(youtubeLinkInput)} className="rounded-[5px] bg-blue-500 text-white cursor-pointer">OK</button>
+                    <button onClick={() => setProfileArr({ name: profileArr.name, des: profileArr.des, profile:`${profileArr.profile}`, yt_link:`${youtubeLinkInput}`, image_image:`${profileArr.image_image}`})} className="rounded-[5px] bg-blue-500 text-white cursor-pointer">OK</button>
                   </div>
                     
                 </div>
               }
-              {selectedTabIndex == 1 && <div>ยังค้าบ</div>}
-              {selectedTabIndex == 2 && <div><img src={input_img} className="w-50" alt="" /></div>}
+
+              {selectedTabIndex == 1 && <div>Coming soon</div>}
+
+              {selectedTabIndex == 2 && 
+                <div>
+                  <img src={profileArr.image_image} className="w-fit" alt="" />
+                  <div className="mt-3 flex-col gap-3  flex">
+                    <FileUploader onSend={handleimgimgurl}></FileUploader>
+                    <button onClick={() => setProfileArr({ name: profileArr.name, des: profileArr.des, profile:`${profileArr.profile}`, yt_link:`${profileArr.yt_link}`, image_image:`${imgImg}`})} className="rounded-[5px] bg-blue-500 text-white cursor-pointer">OK</button>
+                  </div>
+                </div>
+              }
+
             </div>
               
           </div>
