@@ -1,5 +1,4 @@
 import "./App.css"
-import profileOni from "./assets/_Eikichi Onizuka Icon_ - Copy.jfif"
 import wallpaper from "./assets/steam-summer-sale.1920x1080.mp4"
 import settingpic from "./assets/settings-3-fill.png"
 import Setting from"./components/Setting"
