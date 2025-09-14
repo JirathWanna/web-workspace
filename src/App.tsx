@@ -147,8 +147,8 @@ function App() {
       <div className={`${settingVisible || addDreamVisible || addCountDownVisible || dreamInfoVisible || rightSidePop || youtubeVisible ? "absolute inset-0  bg-black/50 z-10" : "-z-50"} `}></div>
       
       {/*หน้าจอทั้งจอ */}
-      <div className="h-screen w-screen flex justify-center items-center overflow-y-auto ">
-        <video src={wallpaper} loop autoPlay muted className="w-full h-full object-cover -z-1 fixed"> </video>
+      <div className="h-screen w-screen flex justify-center items-center overflow-y-auto bg-gradient-to-b from-cyan-100 to-sky-900">
+        {/*<video src={wallpaper} loop autoPlay muted className="w-full h-full object-cover -z-1 fixed"> </video>*/}
         {/* Pop-up */}
         <Setting onSave={handleSave} visible={settingVisible} onClose={() => setSettingVisible(false)}></Setting>
         <AddDream onSave={handleAddDreamSave} onClose={() => setAddDreamVisible(false)} visible={addDreamVisible}></AddDream>
@@ -163,7 +163,7 @@ function App() {
         ></DreamInfo>
         <YoutubeHelp visible={youtubeVisible} onClose={() => setYoutubeVisible(false)}></YoutubeHelp>
 
-        <div className="absolute bottom-0 text-black text-[12px] opacity-50">นี่เป็นเวอร์ชันทดลอง ไม่มีการเผยแพร่ในวงกว้าง ไม่มีการแสวงหาผลกำไร และภาพพื้นหลังไม่ใช่ของผู้สร้างแต่อย่างใด This is a test version. It is not publicly distributed, not intended for profit, and the background images do not belong to this website devoloper.</div>
+        <div className="absolute bottom-0 text-black text-[12px] opacity-50">นี่เป็นเวอร์ชันทดลอง ไม่มีการเผยแพร่ในวงกว้าง ไม่มีการแสวงหาผลกำไร This is a test version. It is not publicly distributed, not intended for profit.</div>
         
         {/* กรอบสีฟ้าใหญ่ */}
         <div className="p-10 bg-gradient-to-bl from-cyan-200/70 to-sky-800/90 h-[92%] md:w-[80%] lg:w-[70%] rounded-2xl flex relative  w-[90%] overflow-y-auto ">
